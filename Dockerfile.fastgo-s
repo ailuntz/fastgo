@@ -1,0 +1,6 @@
+# 使用指定版本的 frps 作为基础镜像
+FROM snowdreamtech/frps:0.60.0
+
+# 将本地的 fastgo-s.toml 配置文件复制到容器内
+COPY fastgo-s.toml /etc/frp/frps.toml
+

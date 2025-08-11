@@ -1,0 +1,10 @@
+[common]
+server_addr = ${SERVER_ADDR}
+server_port = 7000
+token = fastgo
+login_fail_exit = false
+
+[8409]
+local_ip = 127.0.0.1
+local_port = 80
+remote_port = ${REMOTE_PORT}

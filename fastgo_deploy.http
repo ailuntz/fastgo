@@ -1,0 +1,44 @@
+
+### 测试网页
+GET http://192.168.8.135:80
+Accept: application/json
+
+
+### 创建下载链接
+POST http://192.168.8.135:80/api/admin/download
+Content-Type: application/json
+
+{
+  "real_path": "/app/fastgo/book",
+  "max_downloads": 3,
+  "expire_in": 30,
+  "template_style": 10
+}
+
+### 获取token信息
+GET http://192.168.8.135:80/download/1f542eae7cd5452eaf56f9ddd892fabf
+Accept: application/json
+
+### 直接下载文件
+GET http://192.168.8.135:80/api/download_direct/03513a49f72f4b97aeb3c2b51ee7d39e
+
+### 创建上传链接
+POST http://192.168.8.135:80/api/admin/upload
+Content-Type: application/json
+
+{
+  "real_path": "/app/fastgo/book",
+  "gb_num": 1,
+  "expire_in": 4000,
+  "template_style": 7
+}
+
+### 上传文件（使用 multipart/form-data）
+POST http://192.168.8.135:80/api/upload_direct/26e42d4059c54a34a27259f1b35e727c
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="files"; filename="file1.txt"
+Content-Type: text/plain
+
+< ./file1.txt

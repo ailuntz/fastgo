@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chunk Upload Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js"></script>
+</head>
+
+<body>
+    <h1>分片上传测试页面</h1>
+    <p style="color: #666; margin-bottom: 20px;">这是用于测试分片上传功能的简易版本，使用前请先创建上传token并验证。</p>
+    
+    <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+        <div style="margin-bottom: 10px;">
+            <label for="tokenInput"><strong>Upload Token:</strong></label>
+            <input type="text" id="tokenInput" value="" placeholder="输入上传token" style="width: 300px; padding: 5px; margin-left: 10px;" />
+            <button id="validateTokenBtn" style="margin-left: 10px; padding: 5px 10px;">验证Token</button>
+        </div>
+        <div id="tokenInfo" style="margin-top: 10px; padding: 8px; background-color: #fff; border: 1px solid #ccc; border-radius: 3px; display: none;">
+            <div id="tokenStatus"></div>
+        </div>
+    </div>
+    <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+        <h3 style="margin-top: 0;">文件选择</h3>
+        <div style="margin-bottom: 10px;">
+            <label><strong>选择单个文件:</strong></label>
+            <input type="file" id="singleFileInput" style="margin-left: 10px;" />
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label><strong>选择文件夹:</strong></label>
+            <input type="file" id="folderInput" webkitdirectory directory multiple style="margin-left: 10px;" />
+        </div>
+        <div>
+            <button id="uploadBtn" style="padding: 8px 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">开始上传</button>
+            <button id="clearStorageBtn" style="padding: 8px 16px; background-color: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">清空后端存储</button>
+            <button id="listFilesBtn" style="padding: 8px 16px; background-color: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer;">查看服务器文件列表</button>
+        </div>
+    </div>
+    <progress id="progressBar" value="0" max="100" style="width: 100%; height: 20px; margin-bottom: 10px;"></progress>
+    <p id="status" style="margin-bottom: 20px; padding: 5px; background-color: #f5f5f5; border-radius: 3px; min-height: 20px;"></p>
+    
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <div style="flex: 1;">
+            <h4>已经上传内容</h4>
+            <div id="serverFilesList" 
+                style="border:1px solid #ccc; padding:10px; max-height:300px; overflow:auto; background-color: #f9f9f9;">
+                <p style="color: #666;"></p>
+            </div>
+        </div>
+        <div style="flex: 1;">
+            <h4>本次上传内容</h4>
+            <div id="uploadStatusContainer"
+                style="border:1px solid #ccc; padding:10px; max-height:300px; overflow:auto; background-color: #fff8dc;">
+                <p style="color: #666;"></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 验证Token功能
+        document.getElementById('validateTokenBtn').onclick = async () => {
+            const token = getToken();
+            if (!token) {
+                alert('请输入Token');
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${BASE_URL}/api/token_info/${token}`);
+                const tokenInfo = await res.json();
+                const container = document.getElementById('tokenInfo');
+                const statusDiv = document.getElementById('tokenStatus');
+                
+                if (tokenInfo.valid) {
+                    if (tokenInfo.token_type !== 'upload') {
+                        statusDiv.innerHTML = `<strong style="color: red;">❌ 错误：这不是上传token (类型: ${tokenInfo.token_type})</strong>`;
+                        container.style.display = 'block';
+                        return;
+                    }
+                    
+                    const usedMB = Math.round((tokenInfo.used_bytes || 0) / 1024 / 1024);
+                    const maxMB = Math.round((tokenInfo.max_storage_bytes || 0) / 1024 / 1024);
+                    const remainingMB = maxMB - usedMB;
+                    
+                    statusDiv.innerHTML = `
+                        <strong style="color: green;">✅ Token有效</strong><br>
+                        <strong>目录:</strong> ${tokenInfo.directory_name || '未知'}<br>
+                        <strong>存储:</strong> ${usedMB}MB / ${maxMB}MB 已使用 (剩余 ${remainingMB}MB)<br>
+                        <strong>过期:</strong> ${tokenInfo.expired ? '已过期' : '未过期'}<br>
+                        <strong>模板:</strong> ${tokenInfo.template_style}
+                    `;
+                    container.style.display = 'block';
+                    
+                    // 自动刷新文件列表
+                    document.getElementById('listFilesBtn').click();
+                } else {
+                    statusDiv.innerHTML = '<strong style="color: red;">❌ Token无效</strong>';
+                    container.style.display = 'block';
+                }
+            } catch (e) {
+                document.getElementById('tokenStatus').innerHTML = `<strong style="color: red;">❌ 验证失败: ${e.message}</strong>`;
+                document.getElementById('tokenInfo').style.display = 'block';
+            }
+        };
+
+        document.getElementById('listFilesBtn').onclick = async () => {
+            const token = getToken();
+            if (!token) {
+                alert('请输入有效的Token');
+                return;
+            }
+            
+            // 验证token类型
+            try {
+                const tokenRes = await fetch(`${BASE_URL}/api/token_info/${token}`);
+                const tokenInfo = await tokenRes.json();
+                if (!tokenInfo.valid || tokenInfo.token_type !== 'upload') {
+                    setStatus('❌ 请输入有效的上传token');
+                    return;
+                }
+            } catch (e) {
+                setStatus(`❌ Token验证失败: ${e.message}`);
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${BASE_URL}/api/list_files/${token}`);
+                const data = await res.json();
+                const backendFiles = data.files;
+                
+                const container = document.getElementById('serverFilesList');
+                container.innerHTML = '';
+                
+                if (backendFiles.length === 0) {
+                    container.innerHTML = '<p style="color: #666;">暂无文件</p>';
+                } else {
+                    const ul = document.createElement('ul');
+                    backendFiles.forEach(file => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `📄 <span style="font-family: monospace;">${file}</span>`;
+                        ul.appendChild(li);
+                    });
+                    container.appendChild(ul);
+                }
+            } catch (e) {
+                setStatus(`❌ 获取文件列表失败: ${e.message}`);
+            }
+        };
+    </script>
+    <script>
+        const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+        const MAX_CONCURRENT = 3;
+        const MAX_RETRY = 3;
+        const TIMEOUT = 30_000; // 30s
+        const BASE_URL = 'http://127.0.0.1:54647';
+        let controller = null; // 用于取消上传
+
+        function getToken() {
+            return document.getElementById('tokenInput').value.trim();
+        }
+
+        document.getElementById('clearStorageBtn').onclick = async () => {
+            const token = getToken();
+            if (!token) {
+                alert('请输入有效的Token');
+                return;
+            }
+            
+            // 验证token类型
+            try {
+                const tokenRes = await fetch(`${BASE_URL}/api/token_info/${token}`);
+                const tokenInfo = await tokenRes.json();
+                if (!tokenInfo.valid || tokenInfo.token_type !== 'upload') {
+                    alert('请输入有效的上传token');
+                    return;
+                }
+            } catch (e) {
+                alert(`Token验证失败: ${e.message}`);
+                return;
+            }
+            
+            if (!confirm("确定要清空后端存储吗？此操作不可恢复。")) return;
+            try {
+                const res = await fetch(`${BASE_URL}/api/clear_storage/${token}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.cleared) {
+                    setStatus("🧹 后端存储已清空");
+                    // 刷新服务器文件列表
+                    const serverContainer = document.getElementById('serverFilesList');
+                    serverContainer.innerHTML = '<p style="color: #666;">暂无文件</p>';
+                    // 清空上传状态对比
+                    const statusContainer = document.getElementById('uploadStatusContainer');
+                    statusContainer.innerHTML = '<p style="color: #666;"></p>';
+                } else {
+                    setStatus("⚠️ 清空失败");
+                }
+            } catch (e) {
+                setStatus(`❌ 清空失败: ${e.message}`);
+            }
+        };
+
+        document.getElementById('uploadBtn').onclick = async () => {
+            const token = getToken();
+            if (!token) {
+                alert('请输入有效的Token');
+                return;
+            }
+            
+            // 验证token类型
+            try {
+                const tokenRes = await fetch(`${BASE_URL}/api/token_info/${token}`);
+                const tokenInfo = await tokenRes.json();
+                if (!tokenInfo.valid) {
+                    alert('Token无效');
+                    return;
+                }
+                if (tokenInfo.token_type !== 'upload') {
+                    alert(`错误：这不是上传token，当前类型: ${tokenInfo.token_type}`);
+                    return;
+                }
+                if (tokenInfo.expired) {
+                    alert('Token已过期');
+                    return;
+                }
+            } catch (e) {
+                alert(`Token验证失败: ${e.message}`);
+                return;
+            }
+            
+            const fileInput = document.getElementById('singleFileInput');
+            const folderInput = document.getElementById('folderInput');
+
+            const singleFile = fileInput.files[0];
+            const folderFiles = Array.from(folderInput.files); // 可能为 []
+
+            let files = [];
+
+            if (singleFile) {
+                // 构造一个模拟 folderInput 的结构，便于统一处理
+                singleFile.relativePath = singleFile.name;
+                files = [singleFile];
+            } else if (folderFiles.length > 0) {
+                // 每个 folderFile 都包含 webkitRelativePath
+                files = folderFiles;
+            } else {
+                alert("请先选择文件或文件夹");
+                return;
+            }
+
+            controller = new AbortController();
+            
+            // 记录上传前的服务器文件列表
+            let previousFiles = [];
+            try {
+                const res = await fetch(`${BASE_URL}/api/list_files/${token}`);
+                const data = await res.json();
+                previousFiles = data.files || [];
+            } catch (e) {
+                console.log('无法获取上传前的文件列表');
+            }
+
+            try {
+                const uploadedFiles = [];
+                for (const file of files) {
+                    const relativePath = file.webkitRelativePath || file.relativePath;
+                    const success = await handleUpload(file, relativePath);
+                    if (success !== false) { // 上传成功或秒传
+                        uploadedFiles.push(relativePath);
+                    }
+                    await showDiffTree(files);
+                }
+                
+                // 上传完成后立即刷新服务器文件列表，并标识新上传的文件
+                await refreshServerFilesList(uploadedFiles, previousFiles);
+                setStatus('✅ 所有上传完成');
+            } catch (err) {
+                setStatus(`❌ 上传失败: ${err.message}`);
+            } finally {
+                // 清空 input 以便用户能重新选择文件
+                fileInput.value = '';
+                folderInput.value = '';
+            }
+        };
+
+        function buildDiffTree(localFiles, backendFiles) {
+            const backendSet = new Set(backendFiles);
+            const root = {};
+
+            for (const path of localFiles) {
+                const parts = path.split('/');
+                let current = root;
+                for (let i = 0; i < parts.length; i++) {
+                    const part = parts[i];
+                    if (!current[part]) {
+                        current[part] = {
+                            __children: {},
+                            __status: (i === parts.length - 1)
+                                ? (backendSet.has(path) ? 'uploaded' : 'missing')
+                                : null
+                        };
+                    }
+                    current = current[part].__children;
+                }
+            }
+
+            return root;
+        }
+        // 递归渲染树为 <ul><li>
+        function renderTree(tree, container) {
+            const ul = document.createElement('ul');
+            for (const key in tree) {
+                const li = document.createElement('li');
+                const node = tree[key];
+
+                const isFile = node.__status !== null;
+                if (isFile) {
+                    const statusIcon = node.__status === 'uploaded' ? '😊' : '❌';
+                    li.textContent = `${statusIcon} ${key}`;
+                } else {
+                    const statusIcon = node.__status = '😊';
+                    li.textContent = `${statusIcon} ${key}`;
+                    renderTree(node.__children, li);
+                }
+
+                ul.appendChild(li);
+            }
+            container.appendChild(ul);
+        }
+
+        async function showDiffTree(localFiles) {
+            setStatus("🔍 比较本地与服务器文件...");
+            const token = getToken();
+            if (!token) {
+                setStatus("❌ 请输入有效的Token");
+                return;
+            }
+
+            const res = await fetch(`${BASE_URL}/api/list_files/${token}`);
+            const data = await res.json();
+            const backendFiles = data.files;
+
+            const relativePaths = localFiles.map(f => f.webkitRelativePath || f.relativePath);
+            const diffTree = buildDiffTree(relativePaths, backendFiles);
+
+            const container = document.getElementById('uploadStatusContainer');
+            container.innerHTML = '';
+            renderTree(diffTree, container);
+        }
+
+        function setProgress(percent) {
+            document.getElementById('progressBar').value = percent;
+        }
+
+        function setStatus(text) {
+            document.getElementById('status').textContent = text;
+        }
+
+        function createFileChunks(file, chunkSize = CHUNK_SIZE) {
+            const chunks = [];
+            let cur = 0;
+            while (cur < file.size) {
+                chunks.push({
+                    index: chunks.length,
+                    chunk: file.slice(cur, cur + chunkSize)
+                });
+                cur += chunkSize;
+            }
+            return chunks;
+        }
+
+        async function calculateHash(chunks) {
+            const spark = new SparkMD5.ArrayBuffer();
+            // for (let i = 0; i < chunks.length; i++) {
+            //     const chunk = await chunks[i].chunk.arrayBuffer();
+            //     spark.append(chunk);
+            // }
+            const firstChunk = await chunks[0].chunk.arrayBuffer();
+            const lastChunk = await chunks[chunks.length - 1].chunk.arrayBuffer();
+
+            spark.append(firstChunk);
+            spark.append(lastChunk);
+            return spark.end();
+        }
+
+        async function checkUploadedChunks(hash) {
+            const token = getToken();
+            const res = await fetch(`${BASE_URL}/api/check_upload/${token}?hash=${hash}`);
+            const data = await res.json();
+            return new Set(data.uploaded || []);
+        }
+
+        async function uploadChunkWithRetry(chunk, hash, relativePath) {
+            let attempt = 0;
+            while (attempt < MAX_RETRY) {
+                try {
+                    const token = getToken();
+                    const formData = new FormData();
+                    formData.append('file', chunk.chunk);
+                    formData.append('index', chunk.index);
+                    formData.append('hash', hash);
+                    formData.append('relativePath', relativePath);
+
+                    const controllerTimeout = new AbortController();
+                    const timeout = setTimeout(() => controllerTimeout.abort(), TIMEOUT);
+
+                    await fetch(`${BASE_URL}/api/upload_chunk/${token}`, {
+                        method: 'POST',
+                        body: formData,
+                        signal: controllerTimeout.signal,
+                    });
+
+                    clearTimeout(timeout);
+                    return;
+                } catch (e) {
+                    attempt++;
+                    if (attempt >= MAX_RETRY) throw new Error(`分片 ${chunk.index} 上传失败`);
+                }
+            }
+        }
+
+        async function uploadChunks(chunks, hash, uploadedSet, onProgress, relativePath) {
+            let uploaded = 0;
+
+            const limit = asyncPool(MAX_CONCURRENT, chunks, async (chunk) => {
+                if (uploadedSet.has(chunk.index)) {
+                    uploaded++;
+                    onProgress(uploaded / chunks.length);
+                    return;
+                }
+
+                await uploadChunkWithRetry(chunk, hash, relativePath);
+                uploaded++;
+                onProgress(uploaded / chunks.length);
+            });
+
+            await limit;
+        }
+
+        async function mergeChunks(hash, totalChunks, relativePath) {
+            const token = getToken();
+            const res = await fetch(`${BASE_URL}/api/merge_chunks/${token}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hash, totalChunks, relativePath })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.detail || `合并失败，状态码 ${res.status}`);
+            }
+
+            return await res.json(); // merged info
+        }
+
+        async function handleUpload(file, relativePath) {
+            setStatus(`⏳ 处理 ${relativePath}`);
+            const chunks = createFileChunks(file);
+            const hash = await calculateHash(chunks);
+            const token = getToken();
+
+            const checkRes = await fetch(`${BASE_URL}/api/check_file/${token}?relativePath=${encodeURIComponent(relativePath)}`);
+            const checkData = await checkRes.json();
+            if (checkData.complete === true) {
+                setStatus(`⚡ 秒传成功：${relativePath}`);
+                return true; // 秒传成功
+            }
+
+            // ⏱️ 开始计时
+            const startTime = performance.now();
+            const uploadedSet = await checkUploadedChunks(hash);
+            await uploadChunks(chunks, hash, uploadedSet, (p) => {
+                setProgress(p * 100);
+            }, relativePath);
+
+            // ⏱️ 结束计时
+            const endTime = performance.now();
+            const timeInSeconds = ((endTime - startTime) / 1000).toFixed(2);
+
+            console.log(`📦 上传耗时：${timeInSeconds} 秒`);
+            try {
+                const result = await mergeChunks(hash, chunks.length, relativePath);
+                setStatus(`✅ 上传并合并完成：${relativePath}`);
+                return true; // 上传成功
+            } catch (e) {
+                setStatus(`❌ 合并失败：${e.message}`);
+                return false; // 上传失败
+            }
+        }
+
+        // 刷新服务器文件列表并标识新上传的文件
+        async function refreshServerFilesList(newlyUploadedFiles, previousFiles) {
+            const token = getToken();
+            try {
+                const res = await fetch(`${BASE_URL}/api/list_files/${token}`);
+                const data = await res.json();
+                const currentFiles = data.files || [];
+                
+                const container = document.getElementById('serverFilesList');
+                container.innerHTML = '';
+                
+                if (currentFiles.length === 0) {
+                    container.innerHTML = '<p style="color: #666;">暂无文件</p>';
+                } else {
+                    const ul = document.createElement('ul');
+                    const newlyUploadedSet = new Set(newlyUploadedFiles);
+                    const previousSet = new Set(previousFiles);
+                    
+                    currentFiles.forEach(file => {
+                        const li = document.createElement('li');
+                        let icon = '📄'; // 默认文件图标
+                        let style = '';
+                        
+                        if (newlyUploadedSet.has(file)) {
+                            // 本次新上传的文件
+                            icon = '🆕';
+                            style = 'color: #28a745; font-weight: bold;';
+                        } else if (previousSet.has(file)) {
+                            // 之前已经存在的文件
+                            icon = '📄';
+                            style = 'color: #6c757d;';
+                        } else {
+                            // 其他时候上传的文件（不在本次上传列表中）
+                            icon = '📁';
+                            style = 'color: #17a2b8;';
+                        }
+                        
+                        li.innerHTML = `${icon} <span style="font-family: monospace; ${style}">${file}</span>`;
+                        ul.appendChild(li);
+                    });
+                    container.appendChild(ul);
+                }
+            } catch (e) {
+                console.error('刷新服务器文件列表失败:', e);
+                const container = document.getElementById('serverFilesList');
+                container.innerHTML = '<p style="color: #dc3545;">❌ 获取文件列表失败</p>';
+            }
+        }
+
+        // 控制并发（手动实现 async pool）
+        async function asyncPool(limit, array, iteratorFn) {
+            const ret = [];
+            const executing = [];
+
+            for (const item of array) {
+                const p = Promise.resolve().then(() => iteratorFn(item));
+                ret.push(p);
+
+                if (limit <= array.length) {
+                    const e = p.then(() => executing.splice(executing.indexOf(e), 1));
+                    executing.push(e);
+                    if (executing.length >= limit) {
+                        await Promise.race(executing);
+                    }
+                }
+            }
+
+            return Promise.all(ret);
+        }
+    </script>
+    <style>
+        ul {
+            list-style-type: none;
+            padding-left: 1em;
+            /* 控制缩进，保留树结构层级感 */
+            margin: 0;
+        }
+
+        li {
+            margin: 2px 0;
+        }
+    </style>
+</body>
+
+</html>

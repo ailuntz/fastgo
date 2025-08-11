@@ -1,0 +1,78 @@
+{
+  "name": "fastgo-extension",
+  "displayName": "FastGo File Sharing Extension",
+  "description": "Create download and upload links for FastGo file sharing service with customizable templates",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.102.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "FastGo Extension",
+      "properties": {
+        "fastgo.baseUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Base URL for FastGo API server"
+        },
+        "fastgo.pathPrefix": {
+          "type": "string",
+          "default": "",
+          "description": "Local path prefix that will be replaced with container path (e.g., /Volumes/usb_main/usb_main)"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "extension.createShareLink",
+        "title": "%commands.createShareLink%"
+      },   
+      {
+        "command": "extension.createUploadLink",
+        "title": "%commands.createUploadLink%"
+      },
+      {
+        "command": "extension.switchLanguage",
+        "title": "%commands.switchLanguage%"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "extension.createShareLink",
+          "when": "resourceScheme == 'file'",
+          "group": "navigation"
+        },
+        {
+          "command": "extension.createUploadLink",
+          "when": "resourceScheme == 'file'",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.102.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}

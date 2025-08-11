@@ -1,0 +1,11 @@
+#frps编辑配置文件
+[common]
+# 监听端口
+bind_port = 7000
+# 面板端口
+dashboard_port = 7878
+# 登录面板账号设置
+dashboard_user = fastgo
+dashboard_pwd = fastgo
+# 身份验证
+token = fastgo

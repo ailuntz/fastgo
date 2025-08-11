@@ -1,0 +1,12 @@
+#frpc编辑配置文件
+[common]
+server_addr = 182.92.0.130
+server_port = 7000
+token = fastgo
+login_fail_exit = false  # 或注释掉这一行
+[8409]
+#type = tcp
+local_ip = 127.0.0.1
+local_port = 80
+remote_port = 8409
+
