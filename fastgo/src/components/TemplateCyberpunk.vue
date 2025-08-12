@@ -121,7 +121,7 @@ export default defineComponent({
 
 <style scoped>
 .cyberpunk-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   margin: 0;
   background: 
@@ -129,9 +129,8 @@ export default defineComponent({
     linear-gradient(45deg, #001122 0%, #000011 50%, #110022 100%);
   color: #00ffff;
   font-family: 'Courier New', monospace;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
+  overflow-x: hidden;
   overflow-y: auto;
   display: flex;
   align-items: center;
@@ -661,8 +660,11 @@ export default defineComponent({
 @media (max-width: 768px) {
   .cyberpunk-container {
     padding: 1rem;
-    height: 100vh;
-    width: 100vw;
+    min-height: auto;
+    height: auto;
+    align-items: flex-start;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
   }
   
   .cyber-interface {

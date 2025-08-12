@@ -167,16 +167,15 @@ export default defineComponent({
 
 <style scoped>
 .terminal-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   margin: 0;
   padding: 0;
   background: #0a0a0a;
   color: #00ff00;
   font-family: 'Courier New', monospace;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
+  overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
 }
@@ -529,6 +528,8 @@ export default defineComponent({
   .terminal-container {
     font-size: 0.8rem;
     padding: 0;
+    min-height: auto;
+    height: auto;
   }
   
   .terminal-header {

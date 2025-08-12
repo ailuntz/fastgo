@@ -130,7 +130,8 @@ export default defineComponent({
     radial-gradient(circle at 40% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
     linear-gradient(135deg, #0a0a0a 0%, #1a0f1a 50%, #0f0a1a 100%);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
 }
 
@@ -612,6 +613,11 @@ export default defineComponent({
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .neon-container {
+    min-height: auto;
+    height: auto;
+  }
+  
   .neon-content {
     padding: 1rem;
   }

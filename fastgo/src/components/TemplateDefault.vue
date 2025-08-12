@@ -48,15 +48,15 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   margin: 0;
   padding: 2rem;
-  background: var(--darkreader-background-ffffff, #181a1b);
+  background: #181a1b;
   color: #e8e6e3;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 
@@ -180,6 +180,8 @@ h1 {
 @media (max-width: 768px) {
   .default-container {
     padding: 1rem;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
   
   h1 {

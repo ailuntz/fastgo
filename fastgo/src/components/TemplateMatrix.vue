@@ -201,7 +201,8 @@ export default defineComponent({
   min-height: 100vh;
   background: #000000;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   font-family: 'Courier New', monospace;
 }
 
@@ -570,6 +571,11 @@ export default defineComponent({
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .matrix-container {
+    min-height: auto;
+    height: auto;
+  }
+  
   .matrix-content {
     padding: 1rem;
   }

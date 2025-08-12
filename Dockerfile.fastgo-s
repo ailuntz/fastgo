@@ -1,6 +1,17 @@
 # 使用指定版本的 frps 作为基础镜像
 FROM snowdreamtech/frps:0.60.0
 
-# 将本地的 fastgo-s.toml 配置文件复制到容器内
-COPY fastgo-s.toml /etc/frp/frps.toml
+# 安装 envsubst 工具来处理环境变量替换
+RUN apk add --no-cache gettext
 
+# 将模板配置文件复制到容器内
+COPY fastgo-s.toml.template /etc/frp/frps.toml.template
+
+# 设置默认环境变量
+ENV DASHBOARD_USER=fastgo
+ENV DASHBOARD_PWD=fastgo
+ENV TOKEN=fastgo
+ENV MAX_POOL_COUNT=5
+
+# 启动时处理模板文件并启动服务
+CMD envsubst < /etc/frp/frps.toml.template > /etc/frp/frps.toml && frps -c /etc/frp/frps.toml

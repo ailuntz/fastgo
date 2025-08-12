@@ -106,7 +106,7 @@ export default defineComponent({
 
 <style scoped>
 .apple-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   margin: 0;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -116,9 +116,8 @@ export default defineComponent({
   align-items: center;
   padding: 2rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
+  overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
 }
@@ -341,7 +340,8 @@ export default defineComponent({
 @media (max-width: 480px) {
   .apple-container {
     padding: 1rem;
-    height: 100vh;
+    min-height: auto;
+    height: auto;
     width: 100vw;
   }
   

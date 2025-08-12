@@ -135,23 +135,20 @@ export default defineComponent({
 .retro-container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
   width: 100vw;
   margin: 0;
-  padding: 0;
+  padding: 2rem;
   background: 
     radial-gradient(circle at 20% 30%, #ff6b35 0%, transparent 50%),
     radial-gradient(circle at 80% 70%, #f7931e 0%, transparent 50%),
     radial-gradient(circle at 40% 80%, #ffd23f 0%, transparent 50%),
     linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1419 100%);
   color: #06ffa5;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
   box-sizing: border-box;
   font-family: 'Orbitron', 'Courier New', monospace;
-  overflow: hidden;
 }
 
 /* Retro过期横幅 */
@@ -245,7 +242,10 @@ export default defineComponent({
     0 0 30px rgba(6, 255, 165, 0.5);
   padding: 2rem;
   max-width: 600px;
-  /* width: 100%; */
+  width: 100%;
+  max-height: calc(100vh - 8rem);
+  box-sizing: border-box;
+  overflow-y: auto;
   position: relative;
 }
 
@@ -647,11 +647,14 @@ export default defineComponent({
 @media (max-width: 768px) {
   .retro-container {
     padding: 1rem;
+    align-items: flex-start;
   }
   
   .retro-screen {
     padding: 1.5rem;
     max-width: none;
+    width: 100%;
+    max-height: calc(100vh - 2rem);
   }
   
   .retro-title {
@@ -694,6 +697,10 @@ export default defineComponent({
 }
 
 @media (max-width: 480px) {
+  .retro-container {
+    padding: 0.5rem;
+  }
+  
   .retro-screen {
     padding: 1rem;
   }

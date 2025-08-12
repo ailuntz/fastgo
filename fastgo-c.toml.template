@@ -1,7 +1,7 @@
 [common]
 server_addr = ${SERVER_ADDR}
 server_port = 7000
-token = fastgo
+token = ${TOKEN}
 login_fail_exit = false
 
 [8409]

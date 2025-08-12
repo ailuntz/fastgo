@@ -101,16 +101,15 @@ export default defineComponent({
 
 <style scoped>
 .steam-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   margin: 0;
   padding: 0;
   background: linear-gradient(135deg, #1b2838 0%, #2a475e 30%, #1e2328 100%);
   color: #c7d5e0;
   font-family: Arial, sans-serif;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
+  overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
 }
@@ -393,6 +392,8 @@ export default defineComponent({
 @media (max-width: 768px) {
   .steam-container {
     padding: 0;
+    min-height: auto;
+    height: auto;
   }
   
   .steam-header {

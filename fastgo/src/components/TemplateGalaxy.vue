@@ -99,7 +99,8 @@ export default defineComponent({
   min-height: 100vh;
   background: linear-gradient(135deg, #0c0c0c 0%, #1a0b2e 25%, #16213e 50%, #0f1419 100%);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -260,10 +261,10 @@ export default defineComponent({
 
 .card-glow {
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(45deg, rgba(100, 255, 218, 0.3), rgba(187, 134, 252, 0.3));
   border-radius: 20px;
   z-index: -1;
@@ -448,12 +449,27 @@ export default defineComponent({
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .galaxy-container {
+    min-height: auto;
+    height: auto;
+    overflow-x: hidden;
+  }
+  
   .galaxy-content {
     padding: 1rem;
+    overflow-x: hidden;
   }
   
   .galaxy-card {
     padding: 1.5rem;
+    overflow: hidden;
+    margin: 0 auto;
+    width: calc(100% - 4rem);
+    max-width: calc(500px - 2rem);
+  }
+  
+  .card-glow {
+    display: none;
   }
   
   .galaxy-title {

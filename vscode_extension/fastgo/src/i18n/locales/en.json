@@ -1,0 +1,58 @@
+{
+  "extension.name": "FastGo File Sharing Extension",
+  "commands.createShareLink": "Create Share Link",
+  "commands.createUploadLink": "Create Upload Link",
+  "commands.switchLanguage": "Switch Language",
+  
+  "templates.default": "Default",
+  "templates.mihoyo": "Mihoyo",
+  "templates.steam": "Steam",
+  "templates.hacker": "Hacker",
+  "templates.apple": "Apple",
+  "templates.cyberpunk": "Cyberpunk",
+  "templates.galaxy": "Galaxy",
+  "templates.matrix": "Matrix",
+  "templates.neon": "Neon",
+  "templates.corporate": "Corporate",
+  "templates.retro": "Retro",
+  
+  "config.serverUrl.prompt": "Please enter FastGo server address (e.g., http://192.168.1.100:8409)",
+  "config.serverUrl.placeholder": "http://your-server:8409",
+  "config.serverUrl.empty": "Server address cannot be empty",
+  "config.serverUrl.invalid": "Please enter a complete URL (including http:// or https://)",
+  "config.serverUrl.saved": "✅ FastGo server address saved",
+  
+  "config.pathPrefix.prompt": "Please enter local mount path prefix (e.g., /mnt/usb_main)",
+  "config.pathPrefix.placeholder": "/path/to/mount",
+  "config.pathPrefix.empty": "Path prefix cannot be empty",
+  "config.pathPrefix.invalid": "Please enter an absolute path (starting with /)",
+  "config.pathPrefix.saved": "✅ Local mount path prefix saved",
+  
+  "share.maxDownloads.prompt": "Please enter maximum download count (default: 3)",
+  "share.maxDownloads.placeholder": "e.g., 3",
+  "share.expireTime.prompt": "Please enter expiration time (hours, default: 24)",
+  "share.expireTime.placeholder": "e.g., 24",
+  "share.template.placeholder": "Select template style (default: {defaultTemplate})",
+  "share.template.description": "Template {value}",
+  "share.success": "✅ Share link: {link}",
+  "share.pathNotValid": "❌ File path is not in mounted directory, cannot share",
+  
+  "upload.expireTime.prompt": "Please enter expiration time (hours, default: 24)",
+  "upload.expireTime.placeholder": "e.g., 24",
+  "upload.capacity.prompt": "Please enter storage capacity limit (GB, default: 2)",
+  "upload.capacity.placeholder": "e.g., 2",
+  "upload.template.placeholder": "Select template style (default: {defaultTemplate})",
+  "upload.template.description": "Template {value}",
+  "upload.success": "✅ Upload link: {link}",
+  "upload.pathNotValid": "❌ File path is not in mounted directory, cannot share",
+  
+  "common.numberOnly": "Must be a number",
+  "common.cancelled": "❌ Operation cancelled",
+  "common.createFailed": "❌ Creation failed: {error}",
+  "common.invalidJson": "Response is not valid JSON",
+  "common.close": "Close",
+  "common.copyToClipboard": "Copy Link",
+  "common.copiedToClipboard": "✅ Link copied to clipboard",
+  
+  "helloWorld.message": "Hello World from HelloWorld!"
+}

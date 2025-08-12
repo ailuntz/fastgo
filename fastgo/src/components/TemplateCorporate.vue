@@ -131,17 +131,18 @@ export default defineComponent({
 .corporate-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   min-height: 100vh;
   width: 100vw;
   margin: 0;
-  padding: 0;
+  padding: 2rem 0;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   color: #212529;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
@@ -454,12 +455,27 @@ export default defineComponent({
 @media (max-width: 768px) {
   .corporate-container {
     padding: 1rem;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
   
   .corporate-main-content {
-    padding: 2rem;
-    max-width: none;
-    margin: 0 0 2rem 0;
+    padding: 1.5rem;
+    max-width: calc(100vw - 2rem);
+    margin: 1rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 
+      0 10px 20px rgba(0, 0, 0, 0.06),
+      0 4px 8px rgba(0, 0, 0, 0.03);
   }
   
   .logo-text {
@@ -480,12 +496,20 @@ export default defineComponent({
   .corporate-download-btn {
     padding: 1rem 1.5rem;
     font-size: 1rem;
+    margin-bottom: 1rem;
   }
   
   .download-info {
     flex-direction: column;
     gap: 0.75rem;
     align-items: center;
+  }
+  
+  .corporate-footer {
+    margin-top: 2rem;
+    padding: 1rem;
+    font-size: 0.8rem;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
   .corporate-expired-banner {
@@ -498,8 +522,19 @@ export default defineComponent({
 }
 
 @media (max-width: 480px) {
+  .corporate-container {
+    padding: 0.5rem;
+    padding-top: 1rem;
+    padding-bottom: 4rem;
+  }
+  
   .corporate-main-content {
-    padding: 1.5rem;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   
   .file-info-card {

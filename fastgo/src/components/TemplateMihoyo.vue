@@ -43,7 +43,7 @@ export default defineComponent({
 /* 手机版原神下载页面 (750×1535) */
 .genshin-official {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;

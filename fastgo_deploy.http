@@ -11,7 +11,7 @@ Content-Type: application/json
 {
   "real_path": "/app/fastgo/book",
   "max_downloads": 3,
-  "expire_in": 30,
+  "expire_in": 3000,
   "template_style": 10
 }
 
