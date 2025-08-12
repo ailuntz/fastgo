@@ -1,6 +1,6 @@
 <div align="center">
 
-![FastGo Logo](https://raw.githubusercontent.com/ailuntz/fastgo/main/vscode_extension/fastgo/images/fastgo.svg)
+![FastGo Logo](https://raw.githubusercontent.com/ailuntz/fastgo/main/vscode_extension/fastgo/images/fastgo.png)
 
 # FastGo - 文件快速分享系统
 
