@@ -14,4 +14,5 @@ ENV TOKEN=fastgo
 ENV MAX_POOL_COUNT=5
 
 # 启动时处理模板文件并启动服务
-CMD envsubst < /etc/frp/frps.toml.template > /etc/frp/frps.toml && frps -c /etc/frp/frps.toml
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["envsubst < /etc/frp/frps.toml.template > /etc/frp/frps.toml && frps -c /etc/frp/frps.toml"]
