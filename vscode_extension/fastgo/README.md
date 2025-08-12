@@ -5,8 +5,8 @@
 # FastGo - Revolutionary File Sharing System
 
 **🌍 Language / 语言选择**
-- [English](README.md) (Current)  
-- [中文简体](README_zh.md)
+- [English](https://github.com/ailuntz/fastgo/blob/main/README.md) (Current)  
+- [中文简体](https://github.com/ailuntz/fastgo/blob/main/README_zh.md)
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-FastGo-blue?style=for-the-badge&logo=github)](https://github.com/ailuntz/fastgo)
 [![VS Code Extension](https://img.shields.io/badge/VS_Code-FastGo-007ACC?style=for-the-badge&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=ailuntz.fastgo)
@@ -116,11 +116,11 @@ After installation, configure two key parameters (prompted on first use):
    - **Template Style**: Choose interface template
 4. Get sharing link for others to download via browser
 
-![Download Demo](images/download_pagetest.gif)
+![Download Demo](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/download_pagetest.gif)
 
 **Template Showcase** - System provides multiple beautiful download page templates:
 
-![Download Templates](images/download_template.gif)
+![Download Templates](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/download_template.gif)
 
 ### Creating Upload Links
 
@@ -132,11 +132,11 @@ After installation, configure two key parameters (prompted on first use):
    - **Template Style**: Choose interface template
 4. Get upload link for others to upload files via browser
 
-![Upload Demo](images/upload_pagetest.gif)
+![Upload Demo](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/upload_pagetest.gif)
 
 **Template Showcase** - System provides multiple beautiful upload page templates:
 
-![Upload Templates](images/upload_template.gif)
+![Upload Templates](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/upload_template.gif)
 
 ## ✨ Features
 

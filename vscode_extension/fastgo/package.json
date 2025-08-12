@@ -2,7 +2,7 @@
   "name": "fastgo-extension",
   "displayName": "FastGo File Sharing Extension",
   "description": "Create download and upload links for FastGo file sharing service with customizable templates",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "ailuntz",
   "icon": "images/fastgo.png",
   "repository": {

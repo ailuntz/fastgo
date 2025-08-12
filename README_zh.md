@@ -5,8 +5,8 @@
 # FastGo - 文件快速分享系统
 
 **🌍 Language / 语言选择**
-- [English](README.md)  
-- [中文简体](README_zh.md) (当前)
+- [English](https://github.com/ailuntz/fastgo/blob/main/README.md)  
+- [中文简体](https://github.com/ailuntz/fastgo/blob/main/README_zh.md) (当前)
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-FastGo-blue?style=for-the-badge&logo=github)](https://github.com/ailuntz/fastgo)
 [![VS Code Extension](https://img.shields.io/badge/VS_Code-FastGo-007ACC?style=for-the-badge&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=ailuntz.fastgo)
