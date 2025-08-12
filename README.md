@@ -246,6 +246,10 @@ npm run watch   # 监听文件变化自动编译
 
 欢迎提交 Issue 和 Pull Request 来改进项目！
 
+## 📊 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ailuntz/fastgo&type=Date)](https://star-history.com/#ailuntz/fastgo&Date)
+
 ## 📄 许可证
 
 本项目采用 MIT 许可证开源。
