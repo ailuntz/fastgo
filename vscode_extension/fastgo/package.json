@@ -43,6 +43,12 @@
           "type": "string",
           "default": "",
           "description": "Local path prefix that will be replaced with container path (e.g., /Volumes/usb_main/usb_main)"
+        },
+        "fastgo.language": {
+          "type": "string",
+          "enum": ["zh-cn", "en"],
+          "default": "",
+          "description": "Extension language preference (empty for auto-detect)"
         }
       }
     },

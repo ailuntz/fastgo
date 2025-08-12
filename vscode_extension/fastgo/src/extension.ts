@@ -198,20 +198,40 @@ export function activate(context: vscode.ExtensionContext) {
 	// 语言切换命令
 	context.subscriptions.push(
 		vscode.commands.registerCommand('extension.switchLanguage', async () => {
+			const currentLocale = i18n.getCurrentLocale();
 			const languages = [
-				{ label: '中文 (简体)', value: 'zh-cn' },
-				{ label: 'English', value: 'en' }
+				{ 
+					label: `${currentLocale === 'zh-cn' ? '✅ ' : ''}中文 (简体)`, 
+					value: 'zh-cn',
+					description: currentLocale === 'zh-cn' ? '当前语言 Current' : ''
+				},
+				{ 
+					label: `${currentLocale === 'en' ? '✅ ' : ''}English`, 
+					value: 'en',
+					description: currentLocale === 'en' ? '当前语言 Current' : ''
+				}
 			];
 			
 			const selected = await vscode.window.showQuickPick(languages, {
-				placeHolder: 'Select Language / 选择语言'
+				placeHolder: 'Select Language / 选择语言',
+				ignoreFocusOut: true
 			});
 			
-			if (selected) {
+			if (selected && selected.value !== currentLocale) {
 				i18n.setLocale(selected.value);
+				
+				// Save language preference to workspace/global settings
+				const config = vscode.workspace.getConfiguration('fastgo');
+				await config.update('language', selected.value, vscode.ConfigurationTarget.Global);
+				
 				vscode.window.showInformationMessage(
-					selected.value === 'zh-cn' ? '✅ 已切换到中文' : '✅ Language switched to English'
-				);
+					selected.value === 'zh-cn' ? '✅ 已切换到中文，重新加载窗口以完全生效' : '✅ Language switched to English, reload window for full effect',
+					selected.value === 'zh-cn' ? '重新加载窗口' : 'Reload Window'
+				).then(choice => {
+					if (choice) {
+						vscode.commands.executeCommand('workbench.action.reloadWindow');
+					}
+				});
 			}
 		})
 	);

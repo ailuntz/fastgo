@@ -28,6 +28,15 @@ class I18n {
     }
 
     private detectLocale(): string {
+        // First check if user has saved a language preference
+        const config = vscode.workspace.getConfiguration('fastgo');
+        const savedLanguage = config.get<string>('language');
+        
+        if (savedLanguage && (savedLanguage === 'zh-cn' || savedLanguage === 'en')) {
+            return savedLanguage;
+        }
+        
+        // Fall back to VSCode language detection
         const vscodeLang = vscode.env.language;
         
         // Map VSCode language codes to our supported locales
