@@ -1,6 +1,112 @@
+<div align="center">
+
+![FastGo Logo](https://raw.githubusercontent.com/ailuntz/fastgo/main/vscode_extension/fastgo/images/fastgo.svg)
+
 # FastGo - 文件快速分享系统
 
+[![GitHub Repository](https://img.shields.io/badge/GitHub-FastGo-blue?style=for-the-badge&logo=github)](https://github.com/ailuntz/fastgo)
+[![VS Code Extension](https://img.shields.io/badge/VS_Code-FastGo-007ACC?style=for-the-badge&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=ailuntz.fastgo)
+[![Docker Hub](https://img.shields.io/badge/Docker-FastGo-2496ED?style=for-the-badge&logo=docker)](https://hub.docker.com/u/ailuntz)
+
+</div>
+
 FastGo 是一个基于 VSCode 插件的文件分享系统，通过 VSCode 资源管理器右键菜单，可以轻松创建文件下载链接和文件上传链接。系统采用容器化架构，支持公网访问，提供多种精美的下载和上传模板。
+
+## 🚀 快速部署
+
+### 必备条件
+- VSCode 插件安装 FastGo 插件
+- 一台公网服务器已安装 （已安装 Docker）
+- 一台本地电脑 （已安装 Docker）
+
+### 1. 服务器端拉取并运行 Docker 容器
+
+在具备公网 IP 的服务器上运行：
+
+```bash
+docker run --restart=always --network host -d --name fastgo_s \
+  -e TOKEN=fastgo \
+  ailuntz/fastgo_s:latest
+```
+
+**环境变量说明：**
+- `TOKEN`: 身份验证 token，需与客户端端一致（默认：fastgo）
+
+### 2. 客户端拉取并运行 Docker 容器
+
+在本地机器上运行：
+
+```bash
+docker run -d --restart=always \
+  -v /Volumes/usb_main/usb_main:/app/fastgo \
+  -e SERVER_ADDR=your.server.ip \
+  -e REMOTE_PORT=8409 \
+  -e TOKEN=fastgo \
+  --name fastgo_c \
+  ailuntz/fastgo_c:latest
+```
+
+**重要参数说明：**
+- `-v /Volumes/usb_main/usb_main`：用作分享及其上传的路径，插件中会使用此路径作为前缀
+- `SERVER_ADDR`: 替换为你的服务器 IP 地址或域名
+- `REMOTE_PORT`: 公网访问端口（默认 8409）
+- `TOKEN`: 身份验证 token，需与服务器端一致（默认：fastgo）
+
+### 3. 从 VSCode 下载插件 FastGo
+```
+  在 VSCode 中搜索并安装 FastGo 插件
+```
+
+### 4. 配置 FastGo 插件
+
+插件安装后需要配置两个关键参数（第一次创建分享或者上传链接会有提示）：
+
+1. **服务器地址 (fastgo.baseUrl)**
+   - 服务器的地址或域名
+   - 格式：`http://your.server.ip:8409`
+   - 例如：`182.98.98.101:8409`
+
+2. **路径前缀 (fastgo.pathPrefix)**  
+   - 客户端挂载进 Docker 的前缀路径
+   - 例如：`/Volumes/usb_main/usb_main`（对应 Docker 挂载命令中的前缀）
+
+**重要说明**：只有 VSCode 挂载进 Docker 的部分文件夹，在资源管理器树中右键时才会出现分享和上传链接选项。
+
+
+## 📖 使用方法
+
+### 创建下载链接
+
+1. 在 VSCode 资源管理器中右键选择文件或文件夹
+2. 选择"创建下载链接"
+3. 配置参数：
+   - **最大下载次数**：限制下载次数（默认 3 次）
+   - **过期时间**：链接有效期（默认 24 小时）
+   - **模板样式**：选择界面模板
+4. 获得分享链接，他人可通过浏览器下载
+
+![下载页面演示](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/download_pagetest.gif)
+
+**模板样式展示** - 系统提供多种精美的下载页面模板：
+
+![下载模板样式](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/download_template.gif)
+
+### 创建上传链接
+
+1. 在 VSCode 资源管理器中右键选择文件夹
+2. 选择"创建上传链接"
+3. 配置参数：
+   - **过期时间**：链接有效期（默认 24 小时）
+   - **存储容量**：最大上传容量（默认 2GB）
+   - **模板样式**：选择界面模板
+4. 获得上传链接，他人可通过浏览器上传文件
+
+![上传页面演示](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/upload_pagetest.gif)
+
+**模板样式展示** - 系统提供多种精美的上传页面模板：
+
+![上传模板样式](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/upload_template.gif)
+
 
 ## ✨ 功能特性
 
@@ -50,124 +156,6 @@ FastGo 是一个基于 VSCode 插件的文件分享系统，通过 VSCode 资源
 | 9 | Corporate | 企业商务风格 |
 | 10 | Retro | 复古怀旧风格 |
 
-## 🚀 快速部署
-
-### 1. 部署 fastgo-s 服务器端
-
-在具备公网 IP 的服务器上运行：
-
-```bash
-# 构建镜像
-docker buildx build --platform linux/amd64 -t fastgo_s -f Dockerfile.fastgo-s .
-
-# 运行服务器
-docker run --restart=always --network host -d --name fastgo_s fastgo_s
-```
-
-服务器将监听：
-- **端口 7000**：FRP 反向代理服务
-- **端口 7878**：FRP 管理面板 (用户名: fastgo, 密码: fastgo)
-
-### 2. 部署 fastgo-c 客户端
-
-在本地机器上运行：
-
-```bash
-# 构建镜像
-docker buildx build --platform linux/amd64 -t fastgo_c -f Dockerfile.fastgo-c .
-
-# 运行客户端
-docker run --restart=always --network host -d --name fastgo_c fastgo_c
-```
-
-或者使用自定义参数：
-
-```bash
-docker run -d --name fastgo_c \
-  -p 80:80 \
-  -v /your/local/path:/app/fastgo \
-  -e SERVER_ADDR=your.server.ip \
-  -e REMOTE_PORT=8409 \
-  fastgo_c
-```
-
-**环境变量说明：**
-- `SERVER_ADDR`: fastgo-s 服务器的公网 IP 地址
-- `REMOTE_PORT`: 公网访问端口（默认 8409）
-
-### 3. 安装 VSCode 插件
-
-1. 打开 VSCode
-2. 进入插件目录：`vscode_extension/helloworld/`
-3. 安装插件：
-   ```bash
-   npm install
-   npm run compile
-   ```
-4. 按 F5 调试运行插件，或打包安装
-
-## ⚙️ 配置说明
-
-### VSCode 插件配置
-
-插件首次使用时会提示配置以下参数：
-
-- **服务器地址 (fastgo.baseUrl)**：fastgo-c 客户端的访问地址
-  - 例如：`http://your.server.ip:8409`
-- **路径前缀 (fastgo.pathPrefix)**：本地路径前缀，用于路径映射
-  - 例如：`/Volumes/usb_main/usb_main` (将被映射为容器内的 `/app/fastgo`)
-
-### FRP 配置
-
-**fastgo-s 服务器配置** (`fastgo-s.toml`)：
-```toml
-[common]
-bind_port = 7000
-dashboard_port = 7878
-dashboard_user = fastgo
-dashboard_pwd = fastgo
-token = fastgo
-```
-
-**fastgo-c 客户端配置** (`fastgo-c.toml`)：
-```toml
-[common]
-server_addr = YOUR_SERVER_IP
-server_port = 7000
-token = fastgo
-
-[8409]
-local_ip = 127.0.0.1
-local_port = 80
-remote_port = 8409
-```
-
-## 📖 使用方法
-
-### 创建下载链接
-
-1. 在 VSCode 资源管理器中右键选择文件或文件夹
-2. 选择"创建下载链接"
-3. 配置参数：
-   - **最大下载次数**：限制下载次数（默认 3 次）
-   - **过期时间**：链接有效期（默认 24 小时）
-   - **模板样式**：选择界面模板
-4. 获得分享链接，他人可通过浏览器下载
-
-### 创建上传链接
-
-1. 在 VSCode 资源管理器中右键选择文件夹
-2. 选择"创建上传链接"
-3. 配置参数：
-   - **过期时间**：链接有效期（默认 24 小时）
-   - **存储容量**：最大上传容量（默认 2GB）
-   - **模板样式**：选择界面模板
-4. 获得上传链接，他人可通过浏览器上传文件
-
-### 使用分享链接
-
-- **下载链接**：直接访问即可下载文件（文件夹会自动打包为 ZIP）
-- **上传链接**：可拖拽文件上传，支持多文件同时上传和断点续传
 
 ## 🛠️ 开发调试
 
@@ -191,7 +179,7 @@ python fastapi_app.py  # 开发服务器运行在 http://localhost:8080
 ### VSCode 插件开发
 
 ```bash
-cd vscode_extension/helloworld
+cd vscode_extension/fastgo
 npm install
 npm run compile  # 编译 TypeScript
 npm run watch   # 监听文件变化自动编译
@@ -227,7 +215,7 @@ npm run watch   # 监听文件变化自动编译
 │       └── package.json     # 插件配置
 ├── Dockerfile.fastgo-c   # 客户端容器
 ├── Dockerfile.fastgo-s   # 服务器容器
-├── fastgo-c.toml        # FRP 客户端配置
+├── fastgo-c.toml.template        # FRP 客户端配置
 ├── fastgo-s.toml        # FRP 服务器配置
 └── nginx.conf           # Nginx 配置
 ```
