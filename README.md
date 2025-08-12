@@ -8,6 +8,12 @@
 [![VS Code Extension](https://img.shields.io/badge/VS_Code-FastGo-007ACC?style=for-the-badge&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=ailuntz.fastgo)
 [![Docker Hub](https://img.shields.io/badge/Docker-FastGo-2496ED?style=for-the-badge&logo=docker)](https://hub.docker.com/u/ailuntz)
 
+[![GitHub stars](https://img.shields.io/github/stars/ailuntz/fastgo?style=social)](https://github.com/ailuntz/fastgo/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ailuntz/fastgo?style=social)](https://github.com/ailuntz/fastgo/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/ailuntz/fastgo)](https://github.com/ailuntz/fastgo/issues)
+[![GitHub license](https://img.shields.io/github/license/ailuntz/fastgo)](https://github.com/ailuntz/fastgo/blob/main/LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/ailuntz/fastgo)](https://github.com/ailuntz/fastgo/releases)
+
 </div>
 
 FastGo 是一个基于 VSCode 插件的文件分享系统，通过 VSCode 资源管理器右键菜单，可以轻松创建文件下载链接和文件上传链接。系统采用容器化架构，支持公网访问，提供多种精美的下载和上传模板。
