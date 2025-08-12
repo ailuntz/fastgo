@@ -1,8 +1,12 @@
 <div align="center">
 
-![FastGo Logo](vscode_extension/fastgo/images/fastgo.svg)
+![FastGo Logo](https://raw.githubusercontent.com/ailuntz/fastgo/main/vscode_extension/fastgo/images/fastgo.png)
 
-# FastGo - 文件快速分享系统
+# FastGo - Revolutionary File Sharing System
+
+**🌍 Language / 语言选择**
+- [English](README.md) (Current)  
+- [中文简体](README_zh.md)
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-FastGo-blue?style=for-the-badge&logo=github)](https://github.com/ailuntz/fastgo)
 [![VS Code Extension](https://img.shields.io/badge/VS_Code-FastGo-007ACC?style=for-the-badge&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=ailuntz.fastgo)
@@ -16,24 +20,24 @@
 
 </div>
 
-FastGo 是一个革命性的文件分享解决方案，专为开发者打造的极速文件分享工具。**无需登录，直链下载，告别网盘限速烦恼！** 只需在 VSCode 资源管理器中轻松右键，即可秒速生成专属分享链接，让文件分享变得前所未有的简单高效。
+FastGo is a revolutionary file sharing solution designed specifically for developers. **No login required, direct download links, say goodbye to cloud storage speed limits!** Simply right-click in VSCode Explorer to instantly generate exclusive sharing links, making file sharing unprecedentedly simple and efficient.
 
-🚀 **核心优势**
-- ⚡ **极速体验**：无需登录注册，点击即下载，满速传输无限制
-- 🔐 **私有部署**：完全掌控数据安全，不经过任何第三方服务器  
-- 🎨 **精美界面**：11种专业模板，每个分享链接都是视觉盛宴
-- 🔧 **开发者友好**：VSCode 深度集成，容器化部署，一键启动
+🚀 **Core Advantages**
+- ⚡ **Lightning Fast**: No registration required, click to download, unlimited speed transfer
+- 🔐 **Private Deployment**: Complete control over data security, no third-party servers involved  
+- 🎨 **Beautiful Interface**: 11 professional templates, each sharing link is a visual feast
+- 🔧 **Developer Friendly**: Deep VSCode integration, containerized deployment, one-click startup
 
-## 🚀 快速部署
+## 🚀 Quick Deployment
 
-### 必备条件
-- VSCode 插件安装 FastGo 插件
-- 一台公网服务器已安装 （已安装 Docker）
-- 一台本地电脑 （已安装 Docker）
+### Prerequisites
+- VSCode with FastGo extension installed
+- A public server with Docker installed
+- A local computer with Docker installed
 
-### 1. 服务器端拉取并运行 Docker 容器
+### 1. Server Side - Pull and Run Docker Container
 
-在具备公网 IP 的服务器上运行：
+Run on your public IP server:
 
 ```bash
 docker run --restart=always --network host -d --name fastgo_s \
@@ -41,12 +45,12 @@ docker run --restart=always --network host -d --name fastgo_s \
   ailuntz/fastgo_s:latest
 ```
 
-**环境变量说明：**
-- `TOKEN`: 身份验证 token，需与客户端端一致（默认：fastgo）
+**Environment Variables:**
+- `TOKEN`: Authentication token, must match the client (default: fastgo)
 
-### 2. 客户端拉取并运行 Docker 容器
+### 2. Client Side - Pull and Run Docker Container
 
-在本地机器上运行：
+Run on your local machine:
 
 **Linux/macOS:**
 ```bash
@@ -70,208 +74,205 @@ docker run -d --restart=always \
   ailuntz/fastgo_c:latest
 ```
 
-**重要参数说明：**
-- `-v` 挂载参数：用作分享及其上传的路径，插件中会使用此路径作为前缀
+**Important Parameters:**
+- `-v` mount parameter: Path used for sharing and uploading, plugin will use this path as prefix
   - Linux/macOS: `/path/to/share:/app/fastgo`
   - Windows: `C:\path\to\share:/app/fastgo`
-- `SERVER_ADDR`: 替换为你的服务器 IP 地址或域名
-- `REMOTE_PORT`: 公网访问端口（默认 8409）
-- `TOKEN`: 身份验证 token，需与服务器端一致（默认：fastgo）
+- `SERVER_ADDR`: Replace with your server IP address or domain name
+- `REMOTE_PORT`: Public access port (default 8409)
+- `TOKEN`: Authentication token, must match server side (default: fastgo)
 
-### 3. 从 VSCode 下载插件 FastGo
+### 3. Download FastGo Extension from VSCode
 ```
-  在 VSCode 中搜索并安装 FastGo 插件
+Search and install FastGo extension in VSCode
 ```
 
-### 4. 配置 FastGo 插件
+### 4. Configure FastGo Extension
 
-插件安装后需要配置两个关键参数（第一次创建分享或者上传链接会有提示）：
+After installation, configure two key parameters (prompted on first use):
 
-1. **服务器地址 (fastgo.baseUrl)**
-   - 服务器的地址或域名
-   - 格式：`http://your.server.ip:8409`
-   - 例如：`182.98.98.101:8409`
+1. **Server Address (fastgo.baseUrl)**
+   - Your server address or domain name
+   - Format: `http://your.server.ip:8409`
+   - Example: `182.98.98.101:8409`
 
-2. **路径前缀 (fastgo.pathPrefix)**  
-   - 客户端挂载进 Docker 的前缀路径
-   - Linux/macOS 示例：`/path/to/share`
-   - Windows 示例：`C:\path\to\share`
-   - 必须与 Docker 挂载命令中的本地路径一致
+2. **Path Prefix (fastgo.pathPrefix)**  
+   - Local path prefix mounted to Docker container
+   - Linux/macOS example: `/path/to/share`
+   - Windows example: `C:\path\to\share`
+   - Must match the local path in Docker mount command
 
-**重要说明**：只有 VSCode 挂载进 Docker 的部分文件夹，在资源管理器树中右键时才会出现分享和上传链接选项。
+**Important Note**: Only folders mounted to Docker container will show sharing and upload options when right-clicking in VSCode Explorer.
 
+## 📖 Usage Guide
 
-## 📖 使用方法
+### Creating Download Links
 
-### 创建下载链接
+1. Right-click on file or folder in VSCode Explorer
+2. Select "Create Share Link"
+3. Configure parameters:
+   - **Max Downloads**: Limit download count (default: 3)
+   - **Expiry Time**: Link validity period (default: 24 hours)
+   - **Template Style**: Choose interface template
+4. Get sharing link for others to download via browser
 
-1. 在 VSCode 资源管理器中右键选择文件或文件夹
-2. 选择"创建下载链接"
-3. 配置参数：
-   - **最大下载次数**：限制下载次数（默认 3 次）
-   - **过期时间**：链接有效期（默认 24 小时）
-   - **模板样式**：选择界面模板
-4. 获得分享链接，他人可通过浏览器下载
+![Download Demo](images/download_pagetest.gif)
 
-![下载页面演示](images/download_pagetest.gif)
+**Template Showcase** - System provides multiple beautiful download page templates:
 
-**模板样式展示** - 系统提供多种精美的下载页面模板：
+![Download Templates](images/download_template.gif)
 
-![下载模板样式](images/download_template.gif)
+### Creating Upload Links
 
-### 创建上传链接
+1. Right-click on folder in VSCode Explorer
+2. Select "Create Upload Link"
+3. Configure parameters:
+   - **Expiry Time**: Link validity period (default: 24 hours)
+   - **Storage Capacity**: Maximum upload capacity (default: 2GB)
+   - **Template Style**: Choose interface template
+4. Get upload link for others to upload files via browser
 
-1. 在 VSCode 资源管理器中右键选择文件夹
-2. 选择"创建上传链接"
-3. 配置参数：
-   - **过期时间**：链接有效期（默认 24 小时）
-   - **存储容量**：最大上传容量（默认 2GB）
-   - **模板样式**：选择界面模板
-4. 获得上传链接，他人可通过浏览器上传文件
+![Upload Demo](images/upload_pagetest.gif)
 
-![上传页面演示](images/upload_pagetest.gif)
+**Template Showcase** - System provides multiple beautiful upload page templates:
 
-**模板样式展示** - 系统提供多种精美的上传页面模板：
+![Upload Templates](images/upload_template.gif)
 
-![上传模板样式](images/upload_template.gif)
+## ✨ Features
 
+### VSCode Extension Features
+- 📂 **Explorer Integration**: Right-click files/folders in Explorer to create sharing links directly
+- 🔗 **Download Link Generation**: Create temporary download links for files or folders (folders auto-packaged as ZIP)
+- 📤 **Upload Link Generation**: Create upload links for directories, allowing others to upload files
+- ⚙️ **Flexible Configuration**: Support server address, path mapping and other configurations
+- 🎨 **Multiple Templates**: 11 beautiful interface templates to choose from
+- 🌍 **Multi-language Support**: Support Chinese and English interfaces
 
-## ✨ 功能特性
+### Web Features
+- 🎯 **Intuitive Interface**: Each sharing link has independent beautiful download/upload pages
+- ⚡ **Chunked Upload**: Support large file chunked upload and resume transfer
+- 📊 **Real-time Progress**: Upload and download progress displayed in real-time
+- 🔒 **Security Control**: Support download count limits and expiration time control
+- 💾 **Storage Management**: Upload links support storage capacity limits
 
-### VSCode 插件功能
-- 📂 **资源管理器集成**：在资源管理器中右键文件/文件夹，直接创建分享链接
-- 🔗 **下载链接生成**：为文件或文件夹创建临时下载链接（文件夹会自动打包为 ZIP）
-- 📤 **上传链接生成**：为目录创建上传链接，允许他人向该目录上传文件
-- ⚙️ **灵活配置**：支持设置服务器地址、路径映射等配置
-- 🎨 **多种模板**：提供 11 种精美的界面模板供选择
-- 🌍 **多语言支持**：支持中文和英文界面
-
-### 网页端功能
-- 🎯 **直观界面**：每个分享链接都有独立的精美下载/上传页面
-- ⚡ **分片上传**：支持大文件分片上传，断点续传
-- 📊 **实时进度**：上传下载进度实时显示
-- 🔒 **安全控制**：支持下载次数限制、时间过期控制
-- 💾 **存储管理**：上传链接支持存储容量限制
-
-## 🏗️ 系统架构
+## 🏗️ System Architecture
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   VSCode 插件   │────│   fastgo-c 客户端  │────│  fastgo-s 服务器 │
-│   (本地使用)    │    │    (本地容器)     │    │   (公网服务器)   │
+│   VSCode Plugin │────│   fastgo-c Client  │────│  fastgo-s Server │
+│   (Local Usage) │    │   (Local Container) │    │  (Public Server)  │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-- **fastgo-s (服务器端)**：运行在具备公网 IP 的服务器上，作为反向代理服务器
-- **fastgo-c (客户端)**：运行在本地，包含 Web 后端、前端界面和反向代理客户端
-- **VSCode 插件**：提供便捷的右键菜单操作，与 fastgo-c 通信
+- **fastgo-s (Server)**: Runs on public IP server as reverse proxy server
+- **fastgo-c (Client)**: Runs locally, contains Web backend, frontend interface and reverse proxy client
+- **VSCode Plugin**: Provides convenient right-click menu operations, communicates with fastgo-c
 
-## 🎨 模板样式
+## 🎨 Template Styles
 
-系统提供 11 种精美的界面模板：
+The system provides 11 beautiful interface templates:
 
-| 模板ID | 模板名称 | 风格描述 |
-|--------|----------|----------|
-| 0 | Default | 简约默认风格 |
-| 1 | Mihoyo | 米哈游游戏风格 |
-| 2 | Steam | Steam 平台风格 |
-| 3 | Hacker | 黑客终端风格 |
-| 4 | Apple | 苹果设计风格 |
-| 5 | Cyberpunk | 赛博朋克风格 |
-| 6 | Galaxy | 星空银河风格 |
-| 7 | Matrix | 黑客帝国风格 |
-| 8 | Neon | 霓虹灯光风格 |
-| 9 | Corporate | 企业商务风格 |
-| 10 | Retro | 复古怀旧风格 |
+| Template ID | Template Name | Style Description |
+|-------------|---------------|-------------------|
+| 0 | Default | Simple default style |
+| 1 | Mihoyo | Mihoyo gaming style |
+| 2 | Steam | Steam platform style |
+| 3 | Hacker | Hacker terminal style |
+| 4 | Apple | Apple design style |
+| 5 | Cyberpunk | Cyberpunk style |
+| 6 | Galaxy | Starry galaxy style |
+| 7 | Matrix | Matrix movie style |
+| 8 | Neon | Neon light style |
+| 9 | Corporate | Corporate business style |
+| 10 | Retro | Retro nostalgic style |
 
+## 🛠️ Development & Debugging
 
-## 🛠️ 开发调试
-
-### 前端开发
+### Frontend Development
 
 ```bash
 cd fastgo
 npm install
-npm run dev  # 开发服务器运行在 http://localhost:4000
-npm run build  # 构建生产版本
+npm run dev  # Development server runs on http://localhost:4000
+npm run build  # Build production version
 ```
 
-### 后端开发
+### Backend Development
 
 ```bash
 cd app
 pip install -r requirements.txt
-python fastapi_app.py  # 开发服务器运行在 http://localhost:8080
+python fastapi_app.py  # Development server runs on http://localhost:8080
 ```
 
-### VSCode 插件开发
+### VSCode Extension Development
 
 ```bash
 cd vscode_extension/fastgo
 npm install
-npm run compile  # 编译 TypeScript
-npm run watch   # 监听文件变化自动编译
+npm run compile  # Compile TypeScript
+npm run watch   # Watch file changes and auto-compile
 ```
 
-## 🔧 技术栈
+## 🔧 Tech Stack
 
-- **前端**：Vue 3 + TypeScript + Vite
-- **后端**：FastAPI + Python
-- **反向代理**：FRP (Fast Reverse Proxy)
-- **容器化**：Docker + Docker Compose
-- **VSCode 插件**：TypeScript + VSCode Extension API
+- **Frontend**: Vue 3 + TypeScript + Vite
+- **Backend**: FastAPI + Python
+- **Reverse Proxy**: FRP (Fast Reverse Proxy)
+- **Containerization**: Docker + Docker Compose
+- **VSCode Extension**: TypeScript + VSCode Extension API
 
-## 📦 项目结构
+## 📦 Project Structure
 
 ```
-├── app/                    # 后端代码
-│   ├── fastapi_app.py     # FastAPI 主应用
-│   ├── storage.py         # 存储管理
-│   ├── config.py         # 配置文件
-│   └── utils.py          # 工具函数
-├── fastgo/               # 前端代码
+├── app/                    # Backend code
+│   ├── fastapi_app.py     # FastAPI main application
+│   ├── storage.py         # Storage management
+│   ├── config.py         # Configuration file
+│   └── utils.py          # Utility functions
+├── fastgo/               # Frontend code
 │   ├── src/
-│   │   ├── components/   # Vue 组件（包含各种模板）
-│   │   ├── pages/       # 页面组件
-│   │   └── api/         # API 接口
-│   └── dist/           # 构建输出
-├── vscode_extension/     # VSCode 插件
-│   └── helloworld/
+│   │   ├── components/   # Vue components (including various templates)
+│   │   ├── pages/       # Page components
+│   │   └── api/         # API interfaces
+│   └── dist/           # Build output
+├── vscode_extension/     # VSCode extension
+│   └── fastgo/
 │       ├── src/
-│       │   ├── extension.ts  # 插件主逻辑
-│       │   └── i18n/        # 国际化支持
-│       └── package.json     # 插件配置
-├── Dockerfile.fastgo-c   # 客户端容器
-├── Dockerfile.fastgo-s   # 服务器容器
-├── fastgo-c.toml.template        # FRP 客户端配置
-├── fastgo-s.toml        # FRP 服务器配置
-└── nginx.conf           # Nginx 配置
+│       │   ├── extension.ts  # Extension main logic
+│       │   └── i18n/        # Internationalization support
+│       └── package.json     # Extension configuration
+├── Dockerfile.fastgo-c   # Client container
+├── Dockerfile.fastgo-s   # Server container
+├── fastgo-c.toml.template        # FRP client configuration
+├── fastgo-s.toml        # FRP server configuration
+└── nginx.conf           # Nginx configuration
 ```
 
-## 🔒 安全特性
+## 🔒 Security Features
 
-- **访问控制**：所有分享链接都有唯一 token，无法枚举
-- **时间限制**：支持链接过期时间设置
-- **次数限制**：下载链接可限制最大下载次数
-- **容量限制**：上传链接可限制最大存储容量
-- **路径校验**：严格的路径验证，防止目录遍历攻击
+- **Access Control**: All sharing links have unique tokens, cannot be enumerated
+- **Time Limits**: Support link expiration time settings
+- **Count Limits**: Download links can limit maximum download count
+- **Capacity Limits**: Upload links can limit maximum storage capacity
+- **Path Validation**: Strict path validation to prevent directory traversal attacks
 
-## 📋 待办事项
+## 📋 TODO
 
-- [ ] 添加文件预览功能
-- [ ] 支持批量操作
-- [ ] 添加访问统计
-- [ ] 支持自定义域名
-- [ ] 添加用户认证系统
+- [ ] Add file preview functionality
+- [ ] Support batch operations
+- [ ] Add access statistics
+- [ ] Support custom domains
+- [ ] Add user authentication system
 
-## 🤝 贡献
+## 🤝 Contributing
 
-欢迎提交 Issue 和 Pull Request 来改进项目！
+Welcome to submit Issues and Pull Requests to improve the project!
 
 ## 📊 Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=ailuntz/fastgo&type=Date)](https://star-history.com/#ailuntz/fastgo&Date)
 
-## 📄 许可证
+## 📄 License
 
-本项目采用 MIT 许可证开源。
+This project is licensed under the MIT License.
