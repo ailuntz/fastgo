@@ -22,10 +22,10 @@
   "config.serverUrl.invalid": "请输入完整的URL (包含http://或https://)",
   "config.serverUrl.saved": "✅ FastGo 服务器地址已保存",
   
-  "config.pathPrefix.prompt": "请输入本地挂载路径前缀 (如: /mnt/usb_main)",
-  "config.pathPrefix.placeholder": "/path/to/mount",
+  "config.pathPrefix.prompt": "请输入本地挂载路径前缀 (Linux/macOS: /path/to/mount, Windows: C:\\path\\to\\mount)",
+  "config.pathPrefix.placeholder": "Linux/macOS: /path/to/mount, Windows: C:\\path\\to\\mount",
   "config.pathPrefix.empty": "路径前缀不能为空",
-  "config.pathPrefix.invalid": "请输入绝对路径 (以/开头)",
+  "config.pathPrefix.invalid": "请输入绝对路径 (Linux/macOS以/开头，Windows以C:\\开头)",
   "config.pathPrefix.saved": "✅ 本地挂载路径前缀已保存",
   
   "share.maxDownloads.prompt": "请输入最大下载次数 (默认: 3)",

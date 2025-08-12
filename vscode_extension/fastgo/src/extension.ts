@@ -61,7 +61,10 @@ async function getConfiguration(): Promise<{baseUrl: string, defaultTemplateStyl
 			ignoreFocusOut: true,
 			validateInput: (val) => {
 				if (!val || !val.trim()) return t('config.pathPrefix.empty');
-				if (!val.startsWith('/')) return t('config.pathPrefix.invalid');
+				// Support both Unix/Linux paths (/path) and Windows paths (C:\path)
+				if (!val.startsWith('/') && !(/^[A-Za-z]:[\\\/]/.test(val))) {
+					return t('config.pathPrefix.invalid');
+				}
 				return null;
 			}
 		});
@@ -88,7 +91,12 @@ function isPathValidForSharing(filePath: string, pathPrefix: string): boolean {
 	if (!pathPrefix) {
 		return false;
 	}
-	return filePath.startsWith(pathPrefix);
+	
+	// Normalize paths for comparison (handle Windows vs Unix path separators)
+	const normalizedFilePath = filePath.replace(/\\/g, '/');
+	const normalizedPathPrefix = pathPrefix.replace(/\\/g, '/');
+	
+	return normalizedFilePath.startsWith(normalizedPathPrefix);
 }
 
 // Convert local path to container path
@@ -96,7 +104,16 @@ function convertToContainerPath(filePath: string, pathPrefix: string, containerP
 	if (!pathPrefix) {
 		return filePath;
 	}
-	return filePath.replace(pathPrefix, containerPath);
+	
+	// Normalize paths for comparison (handle Windows vs Unix path separators)
+	const normalizedFilePath = filePath.replace(/\\/g, '/');
+	const normalizedPathPrefix = pathPrefix.replace(/\\/g, '/');
+	
+	// Replace the path prefix with container path
+	const containerFilePath = normalizedFilePath.replace(normalizedPathPrefix, containerPath);
+	
+	// Ensure container path uses Unix-style separators (for Docker container)
+	return containerFilePath.replace(/\\/g, '/');
 }
 
 // Auto-closing message functions

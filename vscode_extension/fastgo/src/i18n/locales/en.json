@@ -22,10 +22,10 @@
   "config.serverUrl.invalid": "Please enter a complete URL (including http:// or https://)",
   "config.serverUrl.saved": "✅ FastGo server address saved",
   
-  "config.pathPrefix.prompt": "Please enter local mount path prefix (e.g., /mnt/usb_main)",
-  "config.pathPrefix.placeholder": "/path/to/mount",
+  "config.pathPrefix.prompt": "Please enter local mount path prefix (Linux/macOS: /path/to/mount, Windows: C:\\path\\to\\mount)",
+  "config.pathPrefix.placeholder": "Linux/macOS: /path/to/mount, Windows: C:\\path\\to\\mount",
   "config.pathPrefix.empty": "Path prefix cannot be empty",
-  "config.pathPrefix.invalid": "Please enter an absolute path (starting with /)",
+  "config.pathPrefix.invalid": "Please enter an absolute path (Linux/macOS starts with /, Windows starts with C:\\)",
   "config.pathPrefix.saved": "✅ Local mount path prefix saved",
   
   "share.maxDownloads.prompt": "Please enter maximum download count (default: 3)",

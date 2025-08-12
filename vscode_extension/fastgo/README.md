@@ -42,9 +42,21 @@ docker run --restart=always --network host -d --name fastgo_s \
 
 在本地机器上运行：
 
+**Linux/macOS:**
 ```bash
 docker run -d --restart=always \
-  -v /Volumes/usb_main/usb_main:/app/fastgo \
+  -v /path/to/share:/app/fastgo \
+  -e SERVER_ADDR=your.server.ip \
+  -e REMOTE_PORT=8409 \
+  -e TOKEN=fastgo \
+  --name fastgo_c \
+  ailuntz/fastgo_c:latest
+```
+
+**Windows:**
+```bash
+docker run -d --restart=always \
+  -v C:\path\to\share:/app/fastgo \
   -e SERVER_ADDR=your.server.ip \
   -e REMOTE_PORT=8409 \
   -e TOKEN=fastgo \
@@ -53,7 +65,9 @@ docker run -d --restart=always \
 ```
 
 **重要参数说明：**
-- `-v /Volumes/usb_main/usb_main`：用作分享及其上传的路径，插件中会使用此路径作为前缀
+- `-v` 挂载参数：用作分享及其上传的路径，插件中会使用此路径作为前缀
+  - Linux/macOS: `/path/to/share:/app/fastgo`
+  - Windows: `C:\path\to\share:/app/fastgo`
 - `SERVER_ADDR`: 替换为你的服务器 IP 地址或域名
 - `REMOTE_PORT`: 公网访问端口（默认 8409）
 - `TOKEN`: 身份验证 token，需与服务器端一致（默认：fastgo）
@@ -74,7 +88,9 @@ docker run -d --restart=always \
 
 2. **路径前缀 (fastgo.pathPrefix)**  
    - 客户端挂载进 Docker 的前缀路径
-   - 例如：`/Volumes/usb_main/usb_main`（对应 Docker 挂载命令中的前缀）
+   - Linux/macOS 示例：`/path/to/share`
+   - Windows 示例：`C:\path\to\share`
+   - 必须与 Docker 挂载命令中的本地路径一致
 
 **重要说明**：只有 VSCode 挂载进 Docker 的部分文件夹，在资源管理器树中右键时才会出现分享和上传链接选项。
 
