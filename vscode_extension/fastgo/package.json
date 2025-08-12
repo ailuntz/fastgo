@@ -5,6 +5,15 @@
   "version": "0.0.1",
   "publisher": "ailuntz",
   "icon": "images/fastgo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ailuntz/fastgo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ailuntz/fastgo/issues"
+  },
+  "homepage": "https://github.com/ailuntz/fastgo#readme",
+  "license": "MIT",
   "keywords": [
     "file-sharing",
     "fastgo",
