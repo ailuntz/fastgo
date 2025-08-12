@@ -117,11 +117,11 @@ docker run -d --restart=always \
    - **模板样式**：选择界面模板
 4. 获得分享链接，他人可通过浏览器下载
 
-![下载页面演示](images/download_pagetest.gif)
+![下载页面演示](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/download_pagetest.gif)
 
 **模板样式展示** - 系统提供多种精美的下载页面模板：
 
-![下载模板样式](images/download_template.gif)
+![下载模板样式](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/download_template.gif)
 
 ### 创建上传链接
 
@@ -133,11 +133,11 @@ docker run -d --restart=always \
    - **模板样式**：选择界面模板
 4. 获得上传链接，他人可通过浏览器上传文件
 
-![上传页面演示](images/upload_pagetest.gif)
+![上传页面演示](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/upload_pagetest.gif)
 
 **模板样式展示** - 系统提供多种精美的上传页面模板：
 
-![上传模板样式](images/upload_template.gif)
+![上传模板样式](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/upload_template.gif)
 
 
 ## ✨ 功能特性

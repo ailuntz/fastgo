@@ -116,11 +116,11 @@ After installation, configure two key parameters (prompted on first use):
    - **Template Style**: Choose interface template
 4. Get sharing link for others to download via browser
 
-![Download Demo](images/download_pagetest.gif)
+![Download Demo](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/download_pagetest.gif)
 
 **Template Showcase** - System provides multiple beautiful download page templates:
 
-![Download Templates](images/download_template.gif)
+![Download Templates](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/download_template.gif)
 
 ### Creating Upload Links
 
@@ -132,11 +132,11 @@ After installation, configure two key parameters (prompted on first use):
    - **Template Style**: Choose interface template
 4. Get upload link for others to upload files via browser
 
-![Upload Demo](images/upload_pagetest.gif)
+![Upload Demo](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/upload_pagetest.gif)
 
 **Template Showcase** - System provides multiple beautiful upload page templates:
 
-![Upload Templates](images/upload_template.gif)
+![Upload Templates](https://raw.githubusercontent.com/ailuntz/fastgo/main/images/upload_template.gif)
 
 ## ✨ Features
 
